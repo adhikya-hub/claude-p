@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 import sys
-import os
+import json
 
-# Get the command from environment variable set by the hook
-command = os.environ.get('CLAUDE_TOOL_INPUT', '')
+# Read hook context from stdin
+try:
+    data = json.load(sys.stdin)
+    command = data.get('input', {}).get('command', '')
+except:
+    sys.exit(0)
 
 # Check for git push to main
 if 'git' in command and 'push' in command:
